@@ -87,6 +87,19 @@ export type Database = {
     Views: Record<string, never>;
     Functions: {
       inv_is_staff: { Args: Record<string, never>; Returns: boolean };
+      inv_public_event: { Args: { p_slug: string }; Returns: Record<string, unknown> | null };
+      inv_register: {
+        Args: {
+          p_slug: string;
+          p_full_name: string;
+          p_phone: string;
+          p_email: string | null;
+          p_guest_count: number;
+          p_guest_names: string[];
+          p_notes: string | null;
+        };
+        Returns: { id: string; created: boolean };
+      };
     };
     Enums: {
       inv_event_type: EventType;

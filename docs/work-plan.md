@@ -71,7 +71,8 @@ registration_tables   (שלב מאוחר)
 /admin/events/[id]/edit   עריכת אירוע
 /admin/events/[id]/tables שולחנות (שלב מאוחר)
 /e/[slug]                 דף ההזמנה הציבורי (ללא התחברות)
-/api/register             POST, הרשמת מוזמן
+(Server Action)           הרשמת מוזמן דרך פונקציית SQL מאובטחת inv_register
+/e/[slug]/calendar.ics    GET, קובץ יומן
 /api/events/[id]/export   GET, הורדת Excel
 /api/cron/reminders       GET, מופעל ע"י Vercel Cron, שולח תזכורות
 ```
