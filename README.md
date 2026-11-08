@@ -29,6 +29,17 @@ npm run dev
 2. הרץ את קבצי ה-migration לפי הסדר ב-SQL Editor, או דרך Supabase CLI: `supabase db push`
 3. העתק מ-Project Settings > API את ה-URL, ה-publishable key וה-secret key ל-`.env.local`
 
+## הוספת עובד (משתמש למערכת)
+
+1. ב-Supabase Dashboard: Authentication, Users, Add user. הזן אימייל וסיסמה וסמן Auto Confirm.
+2. ב-SQL Editor הרץ:
+
+```sql
+select public.inv_add_staff('person@example.com', 'שם לתצוגה');
+```
+
+בלי השורה הזו המשתמש יוכל להתחבר אבל יקבל "אין הרשאה".
+
 ## משתני סביבה
 
 ראה `.env.example`. המשתנים עם `NEXT_PUBLIC_` נחשפים לדפדפן. `SUPABASE_SECRET_KEY` הוא לשרת בלבד.
