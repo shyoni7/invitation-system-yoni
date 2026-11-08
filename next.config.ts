@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  outputFileTracingIncludes: {
+    "/e/[slug]/opengraph-image": ["./src/assets/fonts/**"],
+  },
   images: {
     remotePatterns: [
       {

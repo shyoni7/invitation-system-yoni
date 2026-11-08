@@ -3,6 +3,7 @@ import { Heebo } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getDirection, type Locale } from "@/i18n/config";
+import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const heebo = Heebo({
@@ -14,6 +15,7 @@ const heebo = Heebo({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("app");
   return {
+    metadataBase: new URL(getSiteUrl()),
     title: { default: t("name"), template: `%s | ${t("name")}` },
     description: t("tagline"),
   };
