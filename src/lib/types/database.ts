@@ -45,12 +45,22 @@ export type RegistrationRow = {
   notes: string | null;
   status: RegistrationStatus;
   source: RegistrationSource;
+  table_id: string | null;
   created_at: string;
   updated_at: string;
 };
 
-export type RegistrationInsert = Omit<RegistrationRow, "id" | "created_at" | "updated_at">;
+export type RegistrationInsert = Omit<RegistrationRow, "id" | "created_at" | "updated_at" | "table_id"> & { table_id?: string | null };
 export type RegistrationUpdate = Partial<RegistrationInsert>;
+
+export type TableRow = {
+  id: string;
+  event_id: string;
+  name: string;
+  capacity: number;
+  sort_order: number;
+  created_at: string;
+};
 
 export type EmailKind = "reminder" | "manual" | "test";
 export type EmailStatus = "sent" | "failed";
@@ -91,7 +101,20 @@ export type Database = {
             referencedRelation: "inv_events";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "inv_registrations_table_id_fkey";
+            columns: ["table_id"];
+            isOneToOne: false;
+            referencedRelation: "inv_tables";
+            referencedColumns: ["id"];
+          },
         ];
+      };
+      inv_tables: {
+        Row: TableRow;
+        Insert: Omit<TableRow, "id" | "created_at" | "sort_order"> & { id?: string; sort_order?: number };
+        Update: Partial<Omit<TableRow, "id" | "created_at">>;
+        Relationships: [];
       };
       inv_email_log: {
         Row: EmailLogRow;
