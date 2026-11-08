@@ -197,7 +197,8 @@
       }
     },
     "notFoundTitle": "ההזמנה לא נמצאה",
-    "notFoundBody": "הקישור שגוי או שהאירוע כבר לא פעיל."
+    "notFoundBody": "הקישור שגוי או שהאירוע כבר לא פעיל.",
+    "shareSiteName": "הזמנה דיגיטלית"
   },
   "registrations": {
     "title": "נרשמים",
