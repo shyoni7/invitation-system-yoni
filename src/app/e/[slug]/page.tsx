@@ -4,6 +4,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getPublicEvent, getRsvpStatus } from "@/lib/public-event";
 import { googleCalendarUrl, googleMapsUrl, wazeUrl } from "@/lib/calendar";
 import { getPublicEventUrl } from "@/lib/site";
+import { shareImagePath } from "@/lib/og/url";
+import { formatEventDate, formatEventTime } from "@/lib/dates";
+import { OG_SIZE } from "@/lib/og/render";
 import { getTemplate } from "@/templates/registry";
 import { renderTemplate } from "@/templates/components";
 import { RegistrationForm } from "./RegistrationForm";
@@ -14,18 +17,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const event = await getPublicEvent(slug);
   if (!event) return {};
+  const t = await getTranslations("invite");
+  const locale = await getLocale();
+  const when = `${formatEventDate(event.date_time, locale)}, ${formatEventTime(event.date_time)}`;
+  const where = [event.venue_name, event.address].filter(Boolean).join(", ");
+  const description = event.description?.trim() || [when, where].filter(Boolean).join(" · ");
+  const image = { url: shareImagePath(event.slug, event.updated_at), width: OG_SIZE.width, height: OG_SIZE.height, type: "image/jpeg", alt: event.title };
   return {
     title: { absolute: event.title },
-    description: event.description ?? undefined,
+    description,
     openGraph: {
       title: event.title,
-      description: event.description ?? undefined,
+      description,
       url: getPublicEventUrl(event.slug),
       type: "website",
-      locale: "he_IL",
-      siteName: event.title,
+      locale: locale === "he" ? "he_IL" : "en_US",
+      siteName: t("shareSiteName"),
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title: event.title, description: event.description ?? undefined },
+    twitter: { card: "summary_large_image", title: event.title, description, images: [image.url] },
   };
 }
 

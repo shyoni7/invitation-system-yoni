@@ -18,6 +18,7 @@ export type PublicEvent = {
   gift_link_url: string | null;
   rsvp_deadline: string | null;
   max_guests: number | null;
+  updated_at: string | null;
   confirmed_guests: number;
 };
 

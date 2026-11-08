@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { prewarmShare } from "@/lib/og/prewarm";
 import { redirect } from "next/navigation";
 import { requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -73,11 +75,12 @@ export async function createEvent(_prev: EventFormState, formData: FormData): Pr
   if ("errors" in row) return fail(formData, row.errors);
 
   const supabase = await createClient();
-  const { data, error } = await supabase.from("inv_events").insert(row).select("id").single();
+  const { data, error } = await supabase.from("inv_events").insert(row).select("id, slug, updated_at").single();
   if (error) {
     return fail(formData, isUniqueViolation(error) ? { slug: "slugTaken" } : { form: "saveFailed" });
   }
 
+  after(() => prewarmShare(data.slug, data.updated_at));
   revalidatePath("/admin");
   redirect(`/admin/events/${data.id}`);
 }
@@ -97,11 +100,12 @@ export async function updateEvent(
   void _ignored;
 
   const supabase = await createClient();
-  const { error } = await supabase.from("inv_events").update(update).eq("id", id);
+  const { data, error } = await supabase.from("inv_events").update(update).eq("id", id).select("slug, updated_at").single();
   if (error) {
     return fail(formData, isUniqueViolation(error) ? { slug: "slugTaken" } : { form: "saveFailed" });
   }
 
+  after(() => prewarmShare(data.slug, data.updated_at));
   revalidatePath("/admin");
   revalidatePath(`/admin/events/${id}`);
   redirect(`/admin/events/${id}`);

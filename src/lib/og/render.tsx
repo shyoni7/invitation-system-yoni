@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { getLocale } from "next-intl/server";
-import { getPublicEvent } from "@/lib/public-event";
+import { getPublicEvent, type PublicEvent } from "@/lib/public-event";
 import { formatEventDate, formatEventTime } from "@/lib/dates";
 import { getTemplate } from "@/templates/registry";
 import { toVisual } from "@/lib/bidi-visual";
@@ -11,10 +11,8 @@ import { toVisual } from "@/lib/bidi-visual";
 // Share preview for WhatsApp, Facebook, Telegram and friends.
 // 1200x630 JPEG kept small, because WhatsApp drops previews above ~300KB.
 
-export const alt = "Invitation";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/jpeg";
-export const dynamic = "force-dynamic";
+export const OG_SIZE = { width: 1200, height: 630 };
+const size = OG_SIZE;
 
 const FONT_DIR = path.join(process.cwd(), "src/assets/fonts");
 
@@ -51,9 +49,9 @@ async function loadBackground(mediaUrl: string | null): Promise<string | null> {
 
 const isHebrew = (s: string) => /[֐-׿]/.test(s);
 
-export default async function OpenGraphImage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const event = await getPublicEvent(slug);
+export async function renderShareImage(slug: string): Promise<Buffer | null> {
+  const event: PublicEvent | null = await getPublicEvent(slug);
+  if (!event) return null;
   const locale = await getLocale();
   const [fonts, background] = await Promise.all([loadFonts(), loadBackground(event?.media_url ?? null)]);
 
@@ -87,6 +85,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ slu
         }}
       >
         {background && (
+          // eslint-disable-next-line @next/next/no-img-element -- Satori markup, not a DOM image
           <img src={background} alt="" width={size.width} height={size.height} style={{ position: "absolute", top: 0, left: 0, objectFit: "cover" }} />
         )}
         {background && (
@@ -137,11 +136,5 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ slu
     { ...size, fonts },
   );
 
-  const jpeg = await sharp(Buffer.from(await png.arrayBuffer())).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
-  return new Response(jpeg, {
-    headers: {
-      "Content-Type": "image/jpeg",
-      "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
-    },
-  });
+  return sharp(Buffer.from(await png.arrayBuffer())).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
 }

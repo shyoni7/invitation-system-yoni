@@ -197,7 +197,8 @@
       }
     },
     "notFoundTitle": "Invitation not found",
-    "notFoundBody": "The link is wrong or the event is no longer active."
+    "notFoundBody": "The link is wrong or the event is no longer active.",
+    "shareSiteName": "Digital invitation"
   },
   "registrations": {
     "title": "Registrations",
