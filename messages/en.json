@@ -275,5 +275,33 @@
     "emailBody": "Hi {name},\n\nA reminder for \"{event}\" on {date} at {time}{venue}.\n\nDetails and RSVP: {link}",
     "atVenue": " at {venue}",
     "exportSheet": "Registrations"
+  },
+  "reminders": {
+    "title": "Email reminders",
+    "off": "No reminder is set for this event. You can set one when editing the event.",
+    "scheduledFor": "Automatic reminder scheduled for {date}",
+    "dailyNote": "The automatic scan runs once a day in the morning and sends reminders due within the next 24 hours.",
+    "sentAt": "Reminder sent on {date}",
+    "recipients": "{count, plural, =0 {No registrants with email} one {1 registrant with email} other {# registrants with email}}",
+    "sendNow": "Send reminder to everyone now",
+    "sendNowConfirm": "Send a reminder email to {count} registrants now?",
+    "sendTest": "Send me a test email",
+    "sending": "Sending...",
+    "resultSent": "{sent} emails sent{failed, plural, =0 {} other {, # failed}}",
+    "testSentTo": "Test email sent to {email}",
+    "failed": "Sending failed: {error}",
+    "log": "Email log",
+    "logEmpty": "No emails have been sent for this event yet.",
+    "logKinds": {
+      "reminder": "Automatic reminder",
+      "manual": "Manual",
+      "test": "Test"
+    },
+    "logStatus": {
+      "sent": "Sent",
+      "failed": "Failed"
+    },
+    "rowSent": "Sent",
+    "rowSendEmail": "Send email"
   }
 }

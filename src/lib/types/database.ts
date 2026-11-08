@@ -32,7 +32,7 @@ export type EventRow = {
 export type EventInsert = Omit<EventRow, "id" | "created_at" | "updated_at" | "reminder_sent_at"> & {
   id?: string;
 };
-export type EventUpdate = Partial<EventInsert>;
+export type EventUpdate = Partial<EventInsert & { reminder_sent_at: string | null }>;
 
 export type RegistrationRow = {
   id: string;
@@ -51,6 +51,22 @@ export type RegistrationRow = {
 
 export type RegistrationInsert = Omit<RegistrationRow, "id" | "created_at" | "updated_at">;
 export type RegistrationUpdate = Partial<RegistrationInsert>;
+
+export type EmailKind = "reminder" | "manual" | "test";
+export type EmailStatus = "sent" | "failed";
+
+export type EmailLogRow = {
+  id: string;
+  event_id: string | null;
+  registration_id: string | null;
+  kind: EmailKind;
+  to_email: string;
+  subject: string;
+  status: EmailStatus;
+  error: string | null;
+  sent_by: string | null;
+  created_at: string;
+};
 
 export type StaffRow = {
   user_id: string;
@@ -77,6 +93,12 @@ export type Database = {
           },
         ];
       };
+      inv_email_log: {
+        Row: EmailLogRow;
+        Insert: Omit<EmailLogRow, "id" | "created_at"> & { id?: string };
+        Update: Partial<Omit<EmailLogRow, "id" | "created_at">>;
+        Relationships: [];
+      };
       inv_staff: {
         Row: StaffRow;
         Insert: Omit<StaffRow, "created_at">;
@@ -102,6 +124,8 @@ export type Database = {
       };
     };
     Enums: {
+      inv_email_kind: EmailKind;
+      inv_email_status: EmailStatus;
       inv_event_type: EventType;
       inv_registration_status: RegistrationStatus;
       inv_registration_source: RegistrationSource;
