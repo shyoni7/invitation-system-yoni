@@ -20,10 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: event.title,
       description: event.description ?? undefined,
-      images: event.media_url ? [event.media_url] : undefined,
       url: getPublicEventUrl(event.slug),
       type: "website",
+      locale: "he_IL",
+      siteName: event.title,
     },
+    twitter: { card: "summary_large_image", title: event.title, description: event.description ?? undefined },
   };
 }
 
