@@ -9,6 +9,9 @@ import { createClient } from "@/lib/supabase/server";
 import { formatEventDate, formatEventTime } from "@/lib/dates";
 import { getPublicEventUrl } from "@/lib/site";
 import { getTemplate } from "@/templates/registry";
+import { RegistrationsPanel, type RegistrationItem } from "@/components/RegistrationsPanel";
+import { formatPhoneForDisplay, phoneDigits } from "@/lib/phone";
+import { EVENT_TIME_ZONE } from "@/lib/dates";
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requireStaff();
@@ -17,18 +20,43 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
   const locale = await getLocale();
   const supabase = await createClient();
 
-  const { data: event } = await supabase
-    .from("inv_events")
-    .select("*, inv_registrations(guest_count, status)")
-    .eq("id", id)
-    .maybeSingle();
+  const { data: event } = await supabase.from("inv_events").select("*").eq("id", id).maybeSingle();
   if (!event) notFound();
 
-  const regs = event.inv_registrations ?? [];
+  const { data: regRows } = await supabase
+    .from("inv_registrations")
+    .select("*")
+    .eq("event_id", id)
+    .order("created_at", { ascending: false });
+  const regs = regRows ?? [];
   const confirmed = regs.filter((r) => r.status === "confirmed");
   const guests = confirmed.reduce((s, r) => s + r.guest_count, 0);
+  const withEmail = confirmed.filter((r) => r.email).length;
   const publicUrl = getPublicEventUrl(event.slug);
   const template = getTemplate(event.template_id);
+
+  const tReg = await getTranslations("registrations");
+  const dateStr = formatEventDate(event.date_time, locale);
+  const timeStr = formatEventTime(event.date_time);
+  const venueStr = event.venue_name ? tReg("atVenue", { venue: event.venue_name }) : "";
+  const createdFmt = new Intl.DateTimeFormat(locale === "he" ? "he-IL" : "en-GB", {
+    timeZone: EVENT_TIME_ZONE,
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+  const items: RegistrationItem[] = regs.map((r) => {
+    const params = { name: r.full_name, event: event.title, date: dateStr, time: timeStr, venue: venueStr, link: publicUrl };
+    return {
+      ...r,
+      guest_names: Array.isArray(r.guest_names) ? r.guest_names : [],
+      phoneDisplay: formatPhoneForDisplay(r.phone),
+      createdAtDisplay: createdFmt.format(new Date(r.created_at)),
+      whatsappUrl: `https://wa.me/${phoneDigits(r.phone)}?text=${encodeURIComponent(tReg("whatsappMessage", params))}`,
+      mailtoUrl: r.email
+        ? `mailto:${r.email}?subject=${encodeURIComponent(tReg("emailSubject", params))}&body=${encodeURIComponent(tReg("emailBody", params))}`
+        : null,
+    };
+  });
 
   return (
     <>
@@ -55,11 +83,14 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         </div>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-3">
-        <Stat label={t("admin.registrations", { count: confirmed.length })} value={confirmed.length} />
-        <Stat label={t("admin.guests", { count: guests })} value={guests} />
+      <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <Stat label={tReg("stats.registrations")} value={confirmed.length} />
+        <Stat label={tReg("stats.guests")} value={guests} />
+        <Stat label={tReg("stats.withEmail")} value={withEmail} />
         <Stat label={t("eventForm.template")} value={t(`templates.names.${template.nameKey}` as never)} />
       </section>
+
+      <RegistrationsPanel eventId={id} rows={items} />
 
       <section className="flex flex-col gap-3 rounded-xl border border-border bg-white p-5">
         <h2 className="font-semibold">{t("admin.publicLink")}</h2>
@@ -93,7 +124,6 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         )}
       </section>
 
-      <p className="text-sm text-muted">{t("admin.registrationsComingSoon")}</p>
     </>
   );
 }

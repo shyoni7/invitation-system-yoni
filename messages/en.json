@@ -198,5 +198,81 @@
     },
     "notFoundTitle": "Invitation not found",
     "notFoundBody": "The link is wrong or the event is no longer active."
+  },
+  "registrations": {
+    "title": "Registrations",
+    "stats": {
+      "registrations": "Registrations",
+      "guests": "Total guests",
+      "withEmail": "With email",
+      "cancelled": "Cancelled"
+    },
+    "search": "Search by name or phone",
+    "filterAll": "All",
+    "filterConfirmed": "Confirmed",
+    "filterCancelled": "Cancelled",
+    "empty": "No registrations yet. Share the public link.",
+    "noResults": "No results.",
+    "add": "Add manually",
+    "export": "Export to Excel",
+    "columns": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "guests": "Guests",
+      "guestNames": "Guest names",
+      "notes": "Notes",
+      "status": "Status",
+      "source": "Source",
+      "createdAt": "Registered at",
+      "actions": "Actions"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled"
+    },
+    "source": {
+      "self": "Self-registered",
+      "manual": "Manual"
+    },
+    "actions": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "edit": "Edit",
+      "cancel": "Cancel attendance",
+      "restore": "Restore",
+      "delete": "Delete",
+      "deleteConfirm": "Delete {name}'s registration? This cannot be undone."
+    },
+    "form": {
+      "addTitle": "Add registration",
+      "editTitle": "Edit registration",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "email": "Email",
+      "guestCount": "Guest count (including the registrant)",
+      "guestName": "Guest {n} name",
+      "guestNamesHelp": "Optional for manual entries",
+      "notes": "Notes",
+      "status": "Status",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "errors": {
+        "nameRequired": "Enter a name",
+        "phoneRequired": "Enter a phone",
+        "phoneInvalid": "Invalid phone",
+        "emailInvalid": "Invalid email",
+        "guestCountInvalid": "Invalid guest count",
+        "tooLong": "Too long",
+        "phoneTaken": "A registration with this phone already exists",
+        "saveFailed": "Saving failed"
+      }
+    },
+    "whatsappMessage": "Hi {name}, a reminder for \"{event}\" on {date} at {time}{venue}. Details and RSVP: {link}",
+    "emailSubject": "Reminder: {event}",
+    "emailBody": "Hi {name},\n\nA reminder for \"{event}\" on {date} at {time}{venue}.\n\nDetails and RSVP: {link}",
+    "atVenue": " at {venue}",
+    "exportSheet": "Registrations"
   }
 }

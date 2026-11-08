@@ -198,5 +198,81 @@
     },
     "notFoundTitle": "ההזמנה לא נמצאה",
     "notFoundBody": "הקישור שגוי או שהאירוע כבר לא פעיל."
+  },
+  "registrations": {
+    "title": "נרשמים",
+    "stats": {
+      "registrations": "הרשמות",
+      "guests": "סה\"כ מגיעים",
+      "withEmail": "עם אימייל",
+      "cancelled": "בוטלו"
+    },
+    "search": "חיפוש לפי שם או טלפון",
+    "filterAll": "הכל",
+    "filterConfirmed": "מאושרים",
+    "filterCancelled": "בוטלו",
+    "empty": "עדיין אין נרשמים. שתפו את הקישור הציבורי.",
+    "noResults": "אין תוצאות לחיפוש.",
+    "add": "הוספה ידנית",
+    "export": "ייצוא ל-Excel",
+    "columns": {
+      "name": "שם",
+      "phone": "טלפון",
+      "email": "אימייל",
+      "guests": "מגיעים",
+      "guestNames": "שמות המגיעים",
+      "notes": "הערות",
+      "status": "סטטוס",
+      "source": "מקור",
+      "createdAt": "נרשם ב",
+      "actions": "פעולות"
+    },
+    "status": {
+      "confirmed": "מאושר",
+      "cancelled": "בוטל"
+    },
+    "source": {
+      "self": "הרשמה עצמית",
+      "manual": "ידני"
+    },
+    "actions": {
+      "whatsapp": "וואטסאפ",
+      "email": "אימייל",
+      "edit": "עריכה",
+      "cancel": "ביטול הגעה",
+      "restore": "שחזור",
+      "delete": "מחיקה",
+      "deleteConfirm": "למחוק את ההרשמה של {name}? אי אפשר לבטל."
+    },
+    "form": {
+      "addTitle": "הוספת נרשם",
+      "editTitle": "עריכת נרשם",
+      "fullName": "שם מלא",
+      "phone": "טלפון",
+      "email": "אימייל",
+      "guestCount": "מספר מגיעים (כולל הנרשם)",
+      "guestName": "שם מגיע/ה {n}",
+      "guestNamesHelp": "אופציונלי בהזנה ידנית",
+      "notes": "הערות",
+      "status": "סטטוס",
+      "save": "שמירה",
+      "saving": "שומר...",
+      "cancel": "ביטול",
+      "errors": {
+        "nameRequired": "נא להזין שם",
+        "phoneRequired": "נא להזין טלפון",
+        "phoneInvalid": "טלפון לא תקין",
+        "emailInvalid": "אימייל לא תקין",
+        "guestCountInvalid": "מספר מגיעים לא תקין",
+        "tooLong": "ארוך מדי",
+        "phoneTaken": "כבר קיימת הרשמה עם הטלפון הזה",
+        "saveFailed": "השמירה נכשלה"
+      }
+    },
+    "whatsappMessage": "שלום {name}, תזכורת לאירוע \"{event}\" ב{date} בשעה {time}{venue}. לפרטים ועדכון הגעה: {link}",
+    "emailSubject": "תזכורת: {event}",
+    "emailBody": "שלום {name},\n\nתזכורת לאירוע \"{event}\" ב{date} בשעה {time}{venue}.\n\nלפרטים ועדכון הגעה: {link}",
+    "atVenue": " ב{venue}",
+    "exportSheet": "נרשמים"
   }
 }
