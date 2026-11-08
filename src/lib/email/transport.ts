@@ -9,7 +9,13 @@ export function hasEmailEnv() {
 export function createTransport() {
   const user = process.env.GMAIL_USER;
   const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
-  if (!user || !pass) throw new Error("email_not_configured");
+  if (!user || !pass) {
+    // Local development without credentials: print the message instead of sending.
+    if (process.env.NODE_ENV !== "production" || process.env.EMAIL_DRY_RUN === "1") {
+      return nodemailer.createTransport({ jsonTransport: true });
+    }
+    throw new Error("email_not_configured");
+  }
   return nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -20,6 +26,6 @@ export function createTransport() {
 
 export function fromAddress() {
   const name = process.env.EMAIL_FROM_NAME?.trim();
-  const user = process.env.GMAIL_USER ?? "";
+  const user = process.env.GMAIL_USER ?? "noreply@example.com";
   return name ? `"${name.replace(/"/g, "")}" <${user}>` : user;
 }

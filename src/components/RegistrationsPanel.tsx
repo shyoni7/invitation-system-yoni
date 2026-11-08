@@ -12,12 +12,14 @@ import {
   updateRegistration,
   type RegistrationFormState,
 } from "@/app/admin/events/[id]/registrations/actions";
+import { sendRegistrationEmail } from "@/app/admin/events/[id]/reminders/actions";
 
 export type RegistrationItem = RegistrationRow & {
   phoneDisplay: string;
   createdAtDisplay: string;
   whatsappUrl: string;
-  mailtoUrl: string | null;
+  /** when the last email to this registrant was sent, for display */
+  lastEmailAtDisplay: string | null;
 };
 
 type Filter = "all" | "confirmed" | "cancelled";
@@ -28,6 +30,8 @@ export function RegistrationsPanel({ eventId, rows }: { eventId: string; rows: R
   const [filter, setFilter] = useState<Filter>("all");
   const [editing, setEditing] = useState<RegistrationItem | "new" | null>(null);
   const [pending, startTransition] = useTransition();
+  const [emailState, setEmailState] = useState<Record<string, "sending" | "sent" | "failed">>({});
+  const tRem = useTranslations("reminders");
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase().replace(/[\s-]/g, "");
@@ -115,10 +119,26 @@ export function RegistrationsPanel({ eventId, rows }: { eventId: string; rows: R
                       <a href={r.whatsappUrl} target="_blank" rel="noreferrer" className={buttonLinkClass("ghost") + " min-h-9 px-2 text-emerald-700"} title={t("actions.whatsapp")}>
                         <WhatsAppIcon /> <span className="sr-only sm:not-sr-only">{t("actions.whatsapp")}</span>
                       </a>
-                      {r.mailtoUrl && (
-                        <a href={r.mailtoUrl} className={buttonLinkClass("ghost") + " min-h-9 px-2"} title={t("actions.email")}>
-                          <MailIcon /> <span className="sr-only sm:not-sr-only">{t("actions.email")}</span>
-                        </a>
+                      {r.email && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className={`min-h-9 px-2 ${emailState[r.id] === "failed" ? "text-red-700" : ""}`}
+                          disabled={emailState[r.id] === "sending"}
+                          title={r.lastEmailAtDisplay ? `${tRem("rowSent")}: ${r.lastEmailAtDisplay}` : t("actions.email")}
+                          onClick={() => {
+                            setEmailState((s) => ({ ...s, [r.id]: "sending" }));
+                            startTransition(async () => {
+                              const res = await sendRegistrationEmail(eventId, r.id);
+                              setEmailState((s) => ({ ...s, [r.id]: res.ok ? "sent" : "failed" }));
+                            });
+                          }}
+                        >
+                          <MailIcon />{" "}
+                          <span className="sr-only sm:not-sr-only">
+                            {emailState[r.id] === "sending" ? tRem("sending") : emailState[r.id] === "sent" ? tRem("rowSent") : t("actions.email")}
+                          </span>
+                        </Button>
                       )}
                       <Button type="button" variant="ghost" className="min-h-9 px-2" onClick={() => setEditing(r)}>
                         {t("actions.edit")}

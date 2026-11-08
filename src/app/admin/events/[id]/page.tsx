@@ -10,6 +10,8 @@ import { formatEventDate, formatEventTime } from "@/lib/dates";
 import { getPublicEventUrl } from "@/lib/site";
 import { getTemplate } from "@/templates/registry";
 import { RegistrationsPanel, type RegistrationItem } from "@/components/RegistrationsPanel";
+import { RemindersPanel, type EmailLogItem } from "@/components/RemindersPanel";
+import { reminderDueAt } from "@/lib/reminders";
 import { formatPhoneForDisplay, phoneDigits } from "@/lib/phone";
 import { EVENT_TIME_ZONE } from "@/lib/dates";
 
@@ -29,6 +31,13 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
     .eq("event_id", id)
     .order("created_at", { ascending: false });
   const regs = regRows ?? [];
+  const { data: logRows } = await supabase
+    .from("inv_email_log")
+    .select("*")
+    .eq("event_id", id)
+    .order("created_at", { ascending: false })
+    .limit(200);
+  const emailLog = logRows ?? [];
   const confirmed = regs.filter((r) => r.status === "confirmed");
   const guests = confirmed.reduce((s, r) => s + r.guest_count, 0);
   const withEmail = confirmed.filter((r) => r.email).length;
@@ -44,6 +53,13 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
     dateStyle: "short",
     timeStyle: "short",
   });
+  const lastEmailByReg = new Map<string, string>();
+  for (const l of emailLog) {
+    if (l.registration_id && l.status === "sent" && !lastEmailByReg.has(l.registration_id)) {
+      lastEmailByReg.set(l.registration_id, createdFmt.format(new Date(l.created_at)));
+    }
+  }
+  const nameByReg = new Map(regs.map((r) => [r.id, r.full_name]));
   const items: RegistrationItem[] = regs.map((r) => {
     const params = { name: r.full_name, event: event.title, date: dateStr, time: timeStr, venue: venueStr, link: publicUrl };
     return {
@@ -52,11 +68,19 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       phoneDisplay: formatPhoneForDisplay(r.phone),
       createdAtDisplay: createdFmt.format(new Date(r.created_at)),
       whatsappUrl: `https://wa.me/${phoneDigits(r.phone)}?text=${encodeURIComponent(tReg("whatsappMessage", params))}`,
-      mailtoUrl: r.email
-        ? `mailto:${r.email}?subject=${encodeURIComponent(tReg("emailSubject", params))}&body=${encodeURIComponent(tReg("emailBody", params))}`
-        : null,
+      lastEmailAtDisplay: lastEmailByReg.get(r.id) ?? null,
     };
   });
+  const dueAt = reminderDueAt(event);
+  const logItems: EmailLogItem[] = emailLog.map((l) => ({
+    id: l.id,
+    kind: l.kind,
+    to_email: l.to_email,
+    status: l.status,
+    error: l.error,
+    createdAtDisplay: createdFmt.format(new Date(l.created_at)),
+    recipientName: l.registration_id ? (nameByReg.get(l.registration_id) ?? null) : null,
+  }));
 
   return (
     <>
@@ -91,6 +115,15 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       </section>
 
       <RegistrationsPanel eventId={id} rows={items} />
+
+      <RemindersPanel
+        eventId={id}
+        offsetHours={event.reminder_offset_hours}
+        dueAtDisplay={dueAt ? createdFmt.format(dueAt) : null}
+        sentAtDisplay={event.reminder_sent_at ? createdFmt.format(new Date(event.reminder_sent_at)) : null}
+        recipientsWithEmail={withEmail}
+        log={logItems}
+      />
 
       <section className="flex flex-col gap-3 rounded-xl border border-border bg-white p-5">
         <h2 className="font-semibold">{t("admin.publicLink")}</h2>

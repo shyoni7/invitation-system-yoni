@@ -275,5 +275,33 @@
     "emailBody": "שלום {name},\n\nתזכורת לאירוע \"{event}\" ב{date} בשעה {time}{venue}.\n\nלפרטים ועדכון הגעה: {link}",
     "atVenue": " ב{venue}",
     "exportSheet": "נרשמים"
+  },
+  "reminders": {
+    "title": "תזכורות באימייל",
+    "off": "לא הוגדרה תזכורת לאירוע הזה. אפשר להגדיר בעריכת האירוע.",
+    "scheduledFor": "תזכורת אוטומטית מתוכננת ל{date}",
+    "dailyNote": "הסריקה האוטומטית רצה פעם ביום בבוקר, ושולחת תזכורות שמועדן בתוך 24 השעות הקרובות.",
+    "sentAt": "התזכורת נשלחה ב{date}",
+    "recipients": "{count, plural, =0 {אין נרשמים עם אימייל} one {נרשם אחד עם אימייל} other {# נרשמים עם אימייל}}",
+    "sendNow": "שלח תזכורת לכולם עכשיו",
+    "sendNowConfirm": "לשלוח עכשיו אימייל תזכורת ל-{count} נרשמים?",
+    "sendTest": "שלח מייל בדיקה אליי",
+    "sending": "שולח...",
+    "resultSent": "נשלחו {sent} מיילים{failed, plural, =0 {} other {, # נכשלו}}",
+    "testSentTo": "מייל בדיקה נשלח ל-{email}",
+    "failed": "השליחה נכשלה: {error}",
+    "log": "יומן שליחות",
+    "logEmpty": "עדיין לא נשלחו מיילים לאירוע הזה.",
+    "logKinds": {
+      "reminder": "תזכורת אוטומטית",
+      "manual": "ידני",
+      "test": "בדיקה"
+    },
+    "logStatus": {
+      "sent": "נשלח",
+      "failed": "נכשל"
+    },
+    "rowSent": "נשלח",
+    "rowSendEmail": "שלח אימייל"
   }
 }
