@@ -66,6 +66,16 @@ docs/                 אפיון ותכנית עבודה
 .claude/skills/       סקילים של עיצוב ו-React לסשנים של Claude Code
 ```
 
+## בדיקות קצה לקצה
+
+הבדיקות ב-`tests/` רצות מול שרת חי (מקומי או Vercel):
+
+```bash
+BASE_URL=http://localhost:3000 TEST_EVENT_SLUG=<slug-של-אירוע-פעיל> npm run test:e2e
+```
+
+בלי `TEST_EVENT_SLUG` רצות רק הבדיקות שלא דורשות אירוע. הבדיקות רצות בדסקטופ ובאמולציית iPhone, ומשאירות הרשמות בדיקה באירוע שנבחר, לכן עדיף אירוע ייעודי לבדיקות.
+
 ## פקודות
 
 ```bash
@@ -73,4 +83,5 @@ npm run dev     # פיתוח
 npm run build   # בנייה
 npm run start   # הרצת גרסת production
 npm run lint    # ESLint
+npm run test:e2e  # Playwright (ראה למעלה)
 ```
