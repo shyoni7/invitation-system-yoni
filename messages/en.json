@@ -303,5 +303,40 @@
     },
     "rowSent": "Sent",
     "rowSendEmail": "Send email"
+  },
+  "tables": {
+    "title": "Seating",
+    "link": "Seating",
+    "summary": "{seated} of {total} guests seated, {tables} tables",
+    "addTable": "Add table",
+    "tableName": "Table name",
+    "tableNamePlaceholder": "e.g. Table 1 or Cohen family",
+    "capacity": "Seats",
+    "add": "Add",
+    "adding": "Adding...",
+    "quickAdd": "Quick add: {n} tables of {capacity}",
+    "unassigned": "Unassigned",
+    "unassignedEmpty": "Everyone is seated.",
+    "noTables": "No tables yet. Add the first one.",
+    "occupancy": "{used} / {capacity}",
+    "overCapacity": "Over capacity",
+    "dropHere": "Drop here",
+    "remove": "Remove from table",
+    "moveTo": "Assign to table",
+    "noTable": "No table",
+    "rename": "Edit",
+    "delete": "Delete table",
+    "deleteConfirm": "Delete \"{name}\"? Its guests go back to the unassigned list.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "guests": "{count, plural, one {1 guest} other {# guests}}",
+    "errors": {
+      "nameRequired": "Enter a name",
+      "capacityInvalid": "Invalid seat count",
+      "saveFailed": "Saving failed"
+    },
+    "exportColumn": "Table",
+    "backToEvent": "Back to event",
+    "print": "Print"
   }
 }

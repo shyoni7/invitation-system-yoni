@@ -15,11 +15,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const { data: event } = await supabase.from("inv_events").select("title, slug").eq("id", id).maybeSingle();
   if (!event) return new Response("Not found", { status: 404 });
 
-  const { data: rows } = await supabase
-    .from("inv_registrations")
-    .select("*")
-    .eq("event_id", id)
-    .order("created_at", { ascending: true });
+  const [{ data: rows }, { data: tables }] = await Promise.all([
+    supabase.from("inv_registrations").select("*").eq("event_id", id).order("created_at", { ascending: true }),
+    supabase.from("inv_tables").select("id, name").eq("event_id", id),
+  ]);
+  const tableName = new Map((tables ?? []).map((tb) => [tb.id, tb.name]));
+  const tTables = await getTranslations("tables");
 
   const wb = new ExcelJS.Workbook();
   wb.creator = "invitation-system";
@@ -31,6 +32,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     { header: t("columns.guests"), key: "guests", width: 10 },
     { header: t("columns.guestNames"), key: "guestNames", width: 40 },
     { header: t("columns.notes"), key: "notes", width: 40 },
+    { header: tTables("exportColumn"), key: "table", width: 16 },
     { header: t("columns.status"), key: "status", width: 12 },
     { header: t("columns.source"), key: "source", width: 14 },
     { header: t("columns.createdAt"), key: "createdAt", width: 20 },
@@ -51,6 +53,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       guests: r.guest_count,
       guestNames: (r.guest_names ?? []).join(", "),
       notes: r.notes ?? "",
+      table: r.table_id ? (tableName.get(r.table_id) ?? "") : "",
       status: t(`status.${r.status}`),
       source: t(`source.${r.source}`),
       createdAt: fmt.format(new Date(r.created_at)),

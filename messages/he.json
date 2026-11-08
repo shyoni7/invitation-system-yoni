@@ -303,5 +303,40 @@
     },
     "rowSent": "נשלח",
     "rowSendEmail": "שלח אימייל"
+  },
+  "tables": {
+    "title": "סידור שולחנות",
+    "link": "סידור שולחנות",
+    "summary": "{seated} מתוך {total} מגיעים משובצים, {tables} שולחנות",
+    "addTable": "הוספת שולחן",
+    "tableName": "שם השולחן",
+    "tableNamePlaceholder": "למשל: שולחן 1 או משפחת כהן",
+    "capacity": "מקומות",
+    "add": "הוספה",
+    "adding": "מוסיף...",
+    "quickAdd": "הוספה מהירה: {n} שולחנות של {capacity}",
+    "unassigned": "לא משובצים",
+    "unassignedEmpty": "כל הנרשמים משובצים.",
+    "noTables": "עדיין אין שולחנות. הוסיפו שולחן ראשון.",
+    "occupancy": "{used} / {capacity}",
+    "overCapacity": "חריגה מהקיבולת",
+    "dropHere": "גררו לכאן",
+    "remove": "הסרה מהשולחן",
+    "moveTo": "שיבוץ לשולחן",
+    "noTable": "ללא שולחן",
+    "rename": "עריכה",
+    "delete": "מחיקת שולחן",
+    "deleteConfirm": "למחוק את \"{name}\"? הנרשמים שבו יחזרו לרשימת הלא משובצים.",
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "guests": "{count, plural, one {מגיע אחד} other {# מגיעים}}",
+    "errors": {
+      "nameRequired": "נא להזין שם",
+      "capacityInvalid": "מספר מקומות לא תקין",
+      "saveFailed": "השמירה נכשלה"
+    },
+    "exportColumn": "שולחן",
+    "backToEvent": "חזרה לאירוע",
+    "print": "הדפסה"
   }
 }
