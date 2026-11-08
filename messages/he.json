@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "מערכת הזמנות",
+    "tagline": "יצירת הזמנות דיגיטליות ומעקב אחרי אישורי הגעה"
+  },
+  "nav": {
+    "events": "אירועים",
+    "login": "כניסה",
+    "logout": "יציאה",
+    "language": "שפה"
+  },
+  "locale": {
+    "he": "עברית",
+    "en": "English"
+  },
+  "home": {
+    "title": "ברוכים הבאים",
+    "setupDone": "התשתית מוכנה. השלב הבא: ניהול אירועים.",
+    "checks": {
+      "nextjs": "Next.js ו-Tailwind",
+      "i18n": "עברית ואנגלית עם כיווניות אוטומטית",
+      "supabase": "חיבור ל-Supabase",
+      "supabaseMissing": "חיבור ל-Supabase: חסרים משתני סביבה"
+    }
+  },
+  "common": {
+    "loading": "טוען...",
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "delete": "מחיקה",
+    "edit": "עריכה",
+    "back": "חזרה"
+  }
+}
